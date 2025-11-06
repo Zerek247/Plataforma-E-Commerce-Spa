@@ -14,8 +14,8 @@
 <!--  NAVBAR -->
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark navbar-overlay py-3">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="#">H&B SPA</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <a class="navbar-brand fw-bold" href="./index.html">H&B SPA</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegación">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -304,15 +304,64 @@
   <script src="./scripts/faq-data.js"></script>
   <script src="./scripts/modal-manager-fixed.js"></script>
   <script defer src="./scripts/auth-ui.js"></script>
-  <script src="../scripts/cart-preview.js"></script>
+  <script src="./scripts/cart-preview.js"></script>
   <script>
   document.addEventListener("DOMContentLoaded", () => {
 
     // --- Navbar Scroll ---
+    const navbarOverlay = document.querySelector(".navbar-overlay");
+
     window.addEventListener("scroll", () => {
-      const n = document.querySelector(".navbar-overlay");
-      window.scrollY > 50 ? n.classList.add("scrolled") : n.classList.remove("scrolled");
+      const n = navbarOverlay;
+      if (!n) return;
+      if (window.scrollY > 50) {
+        n.classList.add("scrolled");
+      } else if (!n.classList.contains("is-open")) {
+        n.classList.remove("scrolled");
+      }
     });
+
+    if (navbarOverlay && window.scrollY > 50) {
+      navbarOverlay.classList.add("scrolled");
+    }
+
+    const navBar = navbarOverlay;
+    const navCollapse = document.getElementById("navbarNav");
+
+    if (navBar && navCollapse) {
+      navCollapse.addEventListener("show.bs.collapse", () => {
+        navBar.classList.add("is-open");
+        navBar.classList.add("scrolled");
+      });
+
+      navCollapse.addEventListener("hidden.bs.collapse", () => {
+        navBar.classList.remove("is-open");
+        if (window.scrollY <= 50) {
+          navBar.classList.remove("scrolled");
+        }
+      });
+
+      if (window.bootstrap?.Collapse) {
+        const collapseInstance = bootstrap.Collapse.getOrCreateInstance(navCollapse, { toggle: false });
+        navCollapse.querySelectorAll(".nav-link, [data-logout-btn]").forEach(link => {
+          link.addEventListener("click", () => {
+            if (window.innerWidth < 992) {
+              collapseInstance.hide();
+            }
+          });
+        });
+
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 992) {
+            collapseInstance.hide();
+            navBar.classList.remove("is-open");
+            if (window.scrollY <= 50) {
+              navBar.classList.remove("scrolled");
+            }
+          }
+        });
+      }
+    }
 
 
     // --- Carrusel 3D ---
