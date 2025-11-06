@@ -309,6 +309,43 @@ h1, h2, h3, h4, h5, h6 {
   border: 2px solid var(--blanco);
 }
 
+.nav-mobile-actions {
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.75rem !important;
+}
+
+.nav-mobile-actions .nav-icon-btn-mobile {
+  flex: 1 1 140px;
+}
+
+.navbar-auth-mobile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.75rem;
+}
+
+.navbar-auth-mobile .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    align-items: center;
+  }
+
+  .navbar-nav .nav-item {
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    display: inline-block;
+  }
+}
+
 /* ========================================
    FOOTER - ESTILO UNIFICADO
    ======================================== */
