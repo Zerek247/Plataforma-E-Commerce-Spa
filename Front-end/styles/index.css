@@ -448,6 +448,53 @@ section#servicios {
     }
 }
 
+@media (max-width: 480px) {
+    header#hero,
+    .carousel-item {
+        min-height: 65vh;
+    }
+
+    .carousel-caption {
+        padding: 0 1rem;
+    }
+
+    .carousel-caption h1 {
+        font-size: 2.1rem;
+    }
+
+    .carousel-caption .lead {
+        font-size: 0.95rem;
+    }
+
+    .gallery-item {
+        min-height: 200px;
+    }
+
+    .team-card {
+        width: 200px;
+        min-height: 280px;
+    }
+}
+
+@media (max-width: 360px) {
+    .carousel-caption h1 {
+        font-size: 1.9rem;
+    }
+
+    .carousel-caption .lead {
+        font-size: 0.9rem;
+    }
+
+    .carousel-caption .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .team-card {
+        width: 190px;
+    }
+}
+
 /* =================================
    Estilos para el botón del Lightbox
 ==================================== */
@@ -466,15 +513,27 @@ section#servicios {
   border-radius: 60px !important;
 }
 @media (max-width: 768px) {
-  
+
   #lightbox-action-button {
-    bottom: 120px; 
-    padding: .9rem 1rem; 
+    bottom: 120px;
+    padding: .9rem 1rem;
     font-size: 0.9rem;
   }
-  
+
   .lightbox-title {
     bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  #lightbox-action-button {
+    bottom: 95px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .lightbox-title {
+    font-size: 1.05rem;
   }
 }
 /* =================================

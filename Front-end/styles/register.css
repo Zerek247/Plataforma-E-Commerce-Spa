@@ -47,3 +47,86 @@
   transform: translateY(-2px) scale(1.03);
   box-shadow: 0 8px 25px rgba(110, 191, 195, 0.5);
 }
+
+@media (max-width: 992px) {
+  .glass-card {
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+  }
+
+  #registroCarousel .carousel-item {
+    min-height: 340px;
+  }
+}
+
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 2rem 1.75rem;
+  }
+
+  .glass-card h2 {
+    font-size: 1.75rem;
+  }
+
+  #registroCarousel .carousel-caption {
+    padding: 0 1.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .glass-card {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .glass-card h2 {
+    font-size: 1.55rem;
+  }
+
+  .glass-card .input-group .btn {
+    padding: 0 0.75rem;
+  }
+
+  #registroCarousel {
+    min-height: 320px;
+  }
+
+  #registroCarousel .carousel-item {
+    min-height: 280px;
+  }
+
+  #registroCarousel .carousel-caption h3 {
+    font-size: 1.4rem;
+  }
+
+  #registroCarousel .carousel-caption p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .glass-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .glass-card h2 {
+    font-size: 1.45rem;
+  }
+
+  .glass-card .btn,
+  .glass-card .btn-spa,
+  .glass-card .btn.btn-turquesa {
+    width: 100%;
+  }
+
+  #registroCarousel .carousel-caption {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  #registroCarousel .carousel-caption h3 {
+    font-size: 1.3rem;
+  }
+
+  #registroCarousel .carousel-caption p {
+    font-size: 0.9rem;
+  }
+}
