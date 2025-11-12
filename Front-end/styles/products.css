@@ -386,3 +386,42 @@
     padding: 1.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  #product-list {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+  }
+
+  #product-list .card {
+    max-width: 280px;
+    height: 360px;
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+  }
+
+  .card-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  #product-list {
+    grid-template-columns: 1fr;
+  }
+
+  #product-list .card {
+    max-width: 260px;
+    height: 340px;
+  }
+
+  .card-actions button {
+    padding: 0.65rem 1rem;
+  }
+}

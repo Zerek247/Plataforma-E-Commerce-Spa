@@ -49,6 +49,22 @@ body {
   line-height: 1.6;
 }
 
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+iframe,
+embed,
+object {
+  max-width: 100%;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Lora', Georgia, serif;
 }
@@ -897,6 +913,78 @@ footer a:hover {
     bottom: 20px;
     right: 20px;
     font-size: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+
+  .nav-mobile-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-mobile-actions .nav-icon-btn-mobile {
+    flex: 1 1 auto;
+  }
+
+  .nav-icon-btn-mobile {
+    width: 100%;
+  }
+
+  .navbar-auth-mobile .btn {
+    width: 100%;
+  }
+
+  .side-modal-header {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .side-modal-body {
+    padding: 1.5rem 1.2rem 2rem;
+  }
+
+  .cart-total {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  footer .d-flex.justify-content-evenly {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .navbar-brand {
+    font-size: 1.15rem;
+  }
+
+  .cart-badge {
+    top: -4px;
+    right: -4px;
+  }
+
+  .cart-badge-mobile {
+    top: -6px;
+    right: -6px;
+  }
+
+  .floating-faq-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+    bottom: 14px;
+    right: 14px;
   }
 }
 
