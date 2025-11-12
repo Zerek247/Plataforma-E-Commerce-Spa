@@ -1,7 +1,4 @@
-/**
- * FAQ Data - Fuente única de verdad para todas las preguntas frecuentes
- * Centralizado para evitar duplicación y facilitar mantenimiento
- */
+
 
 const FAQ_DATA = [
   {
@@ -56,12 +53,7 @@ const FAQ_DATA = [
   }
 ];
 
-/**
- * Genera el HTML del accordion de FAQs
- * @param {string} accordionId - ID único del accordion contenedor
- * @param {string} idPrefix - Prefijo para IDs únicos (ej: 'faq', 'faqModal')
- * @returns {string} HTML del accordion completo
- */
+
 function generateFAQHTML(accordionId = 'faqAccordion', idPrefix = 'faq') {
   return FAQ_DATA.map((faq, index) => {
     const faqId = `${idPrefix}${faq.id}`;
@@ -92,12 +84,7 @@ function generateFAQHTML(accordionId = 'faqAccordion', idPrefix = 'faq') {
   }).join('');
 }
 
-/**
- * Renderiza el accordion de FAQs en un elemento del DOM
- * @param {string} containerId - ID del elemento contenedor del accordion
- * @param {string} accordionId - ID único del accordion
- * @param {string} idPrefix - Prefijo para IDs únicos
- */
+
 function renderFAQ(containerId, accordionId = 'faqAccordion', idPrefix = 'faq') {
   const container = document.getElementById(containerId);
   if (!container) {
@@ -105,7 +92,6 @@ function renderFAQ(containerId, accordionId = 'faqAccordion', idPrefix = 'faq') 
     return;
   }
 
-  // Crear el accordion completo
   const accordionHTML = `
     <div class="accordion" id="${accordionId}">
       ${generateFAQHTML(accordionId, idPrefix)}
@@ -115,10 +101,6 @@ function renderFAQ(containerId, accordionId = 'faqAccordion', idPrefix = 'faq') 
   container.innerHTML = accordionHTML;
 }
 
-/**
- * Inicializa FAQs automáticamente en elementos con data-faq
- * Uso: <div data-faq="true" data-accordion-id="faqAccordion" data-id-prefix="faq"></div>
- */
 function initAutoFAQ() {
   document.querySelectorAll('[data-faq="true"]').forEach(element => {
     const accordionId = element.dataset.accordionId || 'faqAccordion';
@@ -132,7 +114,6 @@ function initAutoFAQ() {
   });
 }
 
-// Auto-inicializar cuando el DOM esté listo
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initAutoFAQ);
 } else {
