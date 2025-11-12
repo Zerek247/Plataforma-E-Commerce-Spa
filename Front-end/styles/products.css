@@ -1,33 +1,26 @@
 body {
-  padding-top: 90px;
+  padding-top: clamp(5rem, 4.2rem + 1vw, 6rem);
   background: linear-gradient(160deg, var(--arena-suave) 0%, #ffffff 40%, var(--lila-rosa) 80%, var(--turquesa-pastel) 100%);
-  background-attachment: fixed;
+  background-attachment: scroll;
 }
 
 #product-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
   justify-content: center;
-  padding: 2rem 0;
-  max-width: 1200px;
+  padding: clamp(1.5rem, 4vw, 3rem) 0;
+  max-width: min(1120px, 100%);
   margin: 0 auto;
-  width: 100%;
-}
-
-#product-list .col-md-4 {
-  display: flex;
-  justify-content: center;
-  padding: 0;
   width: 100%;
 }
 
 #product-list .card {
   position: relative;
   width: 100%;
-  max-width: 350px;
-  height: 450px;
-  border-radius: 15px;
+  aspect-ratio: 3 / 4;
+  min-height: 0;
+  border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(110, 191, 195, 0.2);
   cursor: pointer;

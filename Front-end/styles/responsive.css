@@ -1,0 +1,339 @@
+/* =========================================================
+   Layout & Responsiveness helpers shared across the SPA
+   ========================================================= */
+:root {
+  --nav-safe-space: clamp(4.25rem, 3.25rem + 1vw, 5.25rem);
+  --section-spacing-y: clamp(3rem, 6vw, 6.5rem);
+  --block-spacing: clamp(1.5rem, 3vw, 3rem);
+  --container-inline-padding: clamp(1rem, 4vw, 2.5rem);
+  --radius-lg: 1.5rem;
+  --radius-md: 1rem;
+  --shadow-soft: 0 18px 45px rgba(110, 191, 195, 0.15);
+  --shadow-card-soft: 0 10px 35px rgba(0, 0, 0, 0.12);
+  --text-max-width: 65ch;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  font-size: clamp(0.95rem, 0.35vw + 0.9rem, 1.05rem);
+  background-attachment: scroll !important;
+  scroll-padding-top: var(--nav-safe-space);
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+section,
+.section-block {
+  padding-block: var(--section-spacing-y);
+}
+
+:where(.container, .container-fluid, .container-lg, .container-xl) {
+  padding-inline: var(--container-inline-padding);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-measure {
+  max-width: var(--text-max-width);
+}
+
+/* =========================================================
+   Navigation tweaks
+   ========================================================= */
+.navbar-overlay,
+.navbar-transparent,
+.navbar.bg-light {
+  padding-block: clamp(0.75rem, 0.5rem + 0.7vw, 1.25rem) !important;
+}
+
+.navbar-overlay .navbar-brand,
+.navbar-transparent .navbar-brand,
+.navbar.bg-light .navbar-brand {
+  font-size: clamp(1.1rem, 1rem + 1vw, 1.6rem);
+}
+
+.navbar-overlay .nav-link,
+.navbar-transparent .nav-link,
+.navbar.bg-light .nav-link {
+  font-size: clamp(0.95rem, 0.8rem + 0.3vw, 1.05rem);
+}
+
+.navbar-overlay .navbar-collapse,
+.navbar-transparent .navbar-collapse {
+  row-gap: 0.75rem;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-overlay .navbar-collapse,
+  .navbar-transparent .navbar-collapse {
+    align-items: center;
+    padding-bottom: 1rem;
+  }
+
+  .navbar-overlay .navbar-nav .nav-link,
+  .navbar-transparent .navbar-nav .nav-link {
+    width: min(260px, 85vw);
+  }
+
+  .navbar-overlay .nav-mobile-actions,
+  .navbar-transparent .nav-mobile-actions {
+    padding-inline: 0.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .navbar-overlay .nav-mobile-actions .nav-icon-btn-mobile,
+  .navbar-transparent .nav-mobile-actions .nav-icon-btn-mobile {
+    flex: 1 1 auto;
+  }
+
+  .navbar-overlay .navbar-brand,
+  .navbar-transparent .navbar-brand {
+    letter-spacing: 0.02em;
+  }
+}
+
+.navbar.bg-light .container {
+  gap: 0.75rem;
+}
+
+.navbar.bg-light .container {
+  flex-wrap: wrap;
+}
+
+.navbar.bg-light .btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 767.98px) {
+  .navbar.bg-light .container {
+    justify-content: center;
+  }
+
+  .navbar.bg-light #logout-btn {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   Hero sections & mastheads
+   ========================================================= */
+header#hero,
+#heroCarousel .carousel-item {
+  min-height: clamp(26rem, 75vh, 50rem);
+  height: auto;
+}
+
+header#hero {
+  display: flex;
+  align-items: stretch;
+}
+
+header#hero .carousel-caption {
+  padding-inline: clamp(1.5rem, 6vw, 4.5rem);
+  padding-top: calc(var(--nav-safe-space) + 1rem);
+}
+
+header#hero .carousel-caption h1 {
+  font-size: clamp(2.2rem, 3vw + 1.8rem, 3.5rem);
+}
+
+header#hero .carousel-caption p {
+  font-size: clamp(1.05rem, 0.5rem + 0.8vw, 1.35rem);
+}
+
+@media (max-width: 575.98px) {
+  header#hero .carousel-caption {
+    padding-inline: clamp(1rem, 5vw, 2rem);
+    gap: 0.75rem;
+  }
+}
+
+/* =========================================================
+   Sections & cards shared across pages
+   ========================================================= */
+.gallery-masonry {
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.gallery-item {
+  aspect-ratio: 3 / 4;
+  min-height: 0;
+}
+
+.gallery-overlay {
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.gallery-icon {
+  width: clamp(48px, 4vw + 30px, 64px);
+  height: clamp(48px, 4vw + 30px, 64px);
+}
+
+/* Product cards */
+#product-list {
+  row-gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+#product-list .card,
+.service-card {
+  max-width: min(20rem, 100%);
+  width: min(20rem, 100%);
+  aspect-ratio: 3 / 4;
+  height: auto;
+  min-height: auto;
+}
+
+#product-list .card-body,
+.service-card .service-overlay {
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.card-actions {
+  gap: clamp(0.5rem, 2vw, 0.75rem);
+}
+
+.card-actions .btn,
+.btn-agendar {
+  width: min(100%, 15rem);
+}
+
+.service-overlay p,
+#product-list .card-text {
+  max-height: min(40vh, 150px);
+}
+
+/* Reserve grid */
+.services-grid {
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  margin-inline: auto;
+}
+
+/* Contact cards */
+.contact-card .card-body {
+  padding: clamp(1.5rem, 4vw, 2.5rem) !important;
+}
+
+.contact-card h3 {
+  font-size: clamp(1.25rem, 1.2rem + 1vw, 1.8rem);
+}
+
+/* Form controls */
+form .form-control,
+form .form-select {
+  min-height: 3rem;
+}
+
+form .input-group > .btn {
+  min-height: 3rem;
+}
+
+/* Tables */
+.table-responsive {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card-soft);
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+/* Floating FAQ button */
+.floating-faq-btn {
+  width: clamp(3.25rem, 2.5rem + 2vw, 3.75rem);
+  height: clamp(3.25rem, 2.5rem + 2vw, 3.75rem);
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* Side modals */
+.side-modal {
+  max-width: min(100%, 420px);
+}
+
+.side-modal-header,
+.side-modal-body {
+  padding-inline: clamp(1.25rem, 4vw, 2rem);
+}
+
+@media (max-width: 575.98px) {
+  .side-modal {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+footer {
+  padding-block: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 2.5rem) !important;
+}
+
+footer .d-flex.justify-content-evenly {
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (max-width: 991.98px) {
+  footer .d-flex.justify-content-evenly {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    text-align: center;
+  }
+
+  footer .d-flex.justify-content-evenly > div {
+    margin-inline: auto;
+    max-width: min(420px, 100%);
+  }
+}
+
+/* =========================================================
+   Utility helpers
+   ========================================================= */
+.stack-sm {
+  display: grid;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.stack-md {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.stack-lg {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 2.75rem);
+}
+
+.responsive-grid {
+  display: grid;
+  gap: var(--block-spacing);
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
