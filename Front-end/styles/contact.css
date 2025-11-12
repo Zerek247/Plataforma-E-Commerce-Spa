@@ -1,11 +1,11 @@
 
 body {
   background: linear-gradient(135deg, var(--arena-suave), var(--sal-marina));
-  min-height: 100vh;
+  min-height: calc(100svh - var(--nav-safe-space));
 }
 
 .pt-5 {
-  padding-top: 6rem !important;
+  padding-top: clamp(5rem, 4rem + 2vw, 6rem) !important;
 }
 
 .pb-3 {
@@ -13,7 +13,7 @@ body {
 }
 
 .pb-5 {
-  padding-bottom: 4rem !important;
+  padding-bottom: clamp(3rem, 4vw, 4rem) !important;
 }
 
 .display-4,
