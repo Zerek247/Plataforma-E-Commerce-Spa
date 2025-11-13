@@ -1,14 +1,24 @@
-# Etapa base: usar Java 17 como entorno
-FROM eclipse-temurin:17-jdk-alpine
+# Imagen base con Java 17 y Maven
+FROM maven:3.9.4-eclipse-temurin-17 AS build
 
-# Crear un directorio dentro del contenedor
+# Crear directorio
 WORKDIR /app
 
-# Copiar el JAR generado por Maven al contenedor
-COPY target/emailservice-1.0.0.jar /app/emailservice.jar
+# Copiar proyecto completo
+COPY . .
 
-# Exponer el puerto del servidor
+# Construir el JAR (esto genera target/emailservice-1.0.0.jar en Railway)
+RUN mvn -q -e -DskipTests package
+
+
+# ----- Etapa final -----
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+# Copiar el JAR generado desde la etapa anterior
+COPY --from=build /app/target/emailservice-1.0.0.jar /app/emailservice.jar
+
 EXPOSE 8080
 
-# Ejecutar la aplicación al iniciar el contenedor
 ENTRYPOINT ["java", "-jar", "/app/emailservice.jar"]
