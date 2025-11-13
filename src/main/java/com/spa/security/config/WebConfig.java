@@ -14,12 +14,11 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(
-                                "http://localhost:5500",
-                                "http://127.0.0.1:5500",
-                                "http://localhost:5501",
-                                "http://127.0.0.1:5501",
-                                "https://orange-cheetah-309063.hostingersite.com"
+                        .allowedOriginPatterns(
+                                "http://localhost:*",
+                                "http://127.0.0.1:*",
+                                "https://orange-cheetah-309063.hostingersite.com",
+                                "https://plataforma-e-commerce-spa-production.up.railway.app"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
