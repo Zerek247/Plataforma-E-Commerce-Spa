@@ -6,16 +6,16 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
+                registry.addMapping("/**")
                         .allowedOrigins(
-                                "https://orange-cheetah-309063.hostingersite.com",
                                 "http://localhost:5500",
-                                "http://127.0.0.1:5500"
+                                "http://127.0.0.1:5500",
+                                "https://orange-cheetah-309063.hostingersite.com"
                         )
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedMethods("*")
                         .allowedHeaders("*")
                         .exposedHeaders("Authorization")
-                        .allowCredentials(false);
+                        .allowCredentials(true);
             }
         };
     }
