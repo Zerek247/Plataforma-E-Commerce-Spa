@@ -12,7 +12,6 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    // Usa el remitente configurado en application.properties
     @Value("${spring.mail.username:cuartodeunvago@gmail.com}")
     private String from;
 
@@ -20,18 +19,17 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    /** Envío genérico de correo de texto plano */
     public void enviarcorreo(String para, String asunto, String mensaje) {
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(para);
         email.setSubject(asunto);
         email.setText(mensaje);
-        email.setFrom(from); // usa el remitente configurado
+        email.setFrom(from);
+
         mailSender.send(email);
         System.out.println("Correo enviado a: " + para);
     }
 
-    /** Helper para enviar el código de recuperación (OTP) */
     public void enviarCodigoReset(String para, String codigo, Duration ttl) {
         String asunto = "Código de verificación";
         String mensaje = """

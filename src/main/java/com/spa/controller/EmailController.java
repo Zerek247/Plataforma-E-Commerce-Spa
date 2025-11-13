@@ -20,9 +20,9 @@ public class EmailController {
 
         try {
             emailService.enviarcorreo(para, asunto, mensaje);
-            return ResponseEntity.ok("Correo enviado con exito a: " + para);
+            return ResponseEntity.ok("Correo enviado con éxito a: " + para);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al enviar al correo: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error al enviar correo: " + e.getMessage());
         }
     }
 }
