@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/service-categories")
-@CrossOrigin(origins = "*")
 public class ServiceCategoryController {
 
     private final ServiceCategoryService serviceCategoryService;

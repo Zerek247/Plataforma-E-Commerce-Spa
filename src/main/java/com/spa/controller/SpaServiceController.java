@@ -7,7 +7,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/spa-services")
-@CrossOrigin(origins = "*")
 public class SpaServiceController {
 
     private final SpaServiceService spaServiceService;

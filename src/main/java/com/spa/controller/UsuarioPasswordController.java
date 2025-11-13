@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/usuarios/me")
-@CrossOrigin(origins = "*")
 public class UsuarioPasswordController {
 
     private final UsuarioRepository usuarioRepository;
