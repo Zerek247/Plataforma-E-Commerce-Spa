@@ -1,5 +1,5 @@
 # Etapa base: usar Java 17 como entorno
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-alpine
 
 # Crear un directorio dentro del contenedor
 WORKDIR /app
