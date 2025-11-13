@@ -15,6 +15,13 @@ public class EmailService {
     @Value("${brevo.api.key}")
     private String apiKey;
 
+    @Value("${brevo.api.url:https://api.brevo.com/v3/smtp/email}")
+    private String apiUrl;
+
+    private final HttpClient httpClient = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(15))
+            .build();
+
     public void enviarcorreo(String para, String asunto, String mensaje) {
 
         try {
@@ -33,21 +40,23 @@ public class EmailService {
             """.formatted(para, asunto, mensaje);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
+                    .uri(URI.create(apiUrl))
+                    .header("accept", "application/json")
                     .header("Content-Type", "application/json")
                     .header("api-key", apiKey)
+                    .timeout(Duration.ofSeconds(20))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
 
             HttpResponse<String> response =
-                    HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                    httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             System.out.println("Respuesta de Brevo:");
-            System.out.println(response.statusCode());
+            System.out.println("Status: " + response.statusCode());
             System.out.println(response.body());
 
         } catch (Exception e) {
-            throw new RuntimeException("Error enviando correo: " + e.getMessage());
+            throw new RuntimeException("Error enviando correo: " + e.getMessage(), e);
         }
     }
 
