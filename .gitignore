@@ -37,3 +37,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# IGNORAR ARCHIVOS CON SECRETS
+src/main/resources/application-dev.properties
+*.env
+
+
