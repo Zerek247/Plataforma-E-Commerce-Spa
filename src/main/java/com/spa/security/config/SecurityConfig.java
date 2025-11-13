@@ -1,104 +1,67 @@
-package com.spa.security.config;
+@Bean
+public SecurityFilterChain securityFilterChain(
+        org.springframework.security.config.annotation.web.builders.HttpSecurity http) throws Exception {
 
-import com.spa.security.jwt.JwtUtil;
-import com.spa.security.service.UsuarioDetailsServiceImpl;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+    http
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.disable())   // ← DESACTIVAMOS CORS EN SECURITY
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
 
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig {
+                    // Preflight CORS
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-    private final UsuarioDetailsServiceImpl userDetailsService;
-    private final JwtRequestFilter jwtRequestFilter;
+                    // Autenticación pública
+                    .requestMatchers("/api/auth/**").permitAll()
 
-    public SecurityConfig(UsuarioDetailsServiceImpl userDetailsService, JwtUtil jwtUtil) {
-        this.userDetailsService = userDetailsService;
-        this.jwtRequestFilter = new JwtRequestFilter(jwtUtil, userDetailsService);
-    }
+                    // Catálogo público
+                    .requestMatchers(HttpMethod.GET,
+                            "/api/products", "/api/products/**",
+                            "/api/categories", "/api/categories/**",
+                            "/api/spa-services", "/api/spa-services/**",
+                            "/api/service-categories", "/api/service-categories/**",
+                            "/api/services", "/api/services/**"
+                    ).permitAll()
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(
-            org.springframework.security.config.annotation.web.builders.HttpSecurity http) throws Exception {
+                    // Contacto/email
+                    .requestMatchers(HttpMethod.POST, "/api/email/enviar").permitAll()
 
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
+                    // Reservas
+                    .requestMatchers(HttpMethod.POST, "/api/reservas/**")
+                    .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/api/reservas/**")
+                    .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
 
-                        // Preflight
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    // Órdenes
+                    .requestMatchers("/api/orders/**")
+                    .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
 
-                        // Auth público
-                        .requestMatchers("/api/auth/**").permitAll()
+                    // Usuarios
+                    .requestMatchers(HttpMethod.GET, "/api/usuarios/**")
+                    .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/api/usuarios/me/password")
+                    .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
 
-                        // Catálogo público
-                        .requestMatchers(HttpMethod.GET,
-                                "/api/products", "/api/products/**",
-                                "/api/categories", "/api/categories/**",
-                                "/api/spa-services", "/api/spa-services/**",
-                                "/api/service-categories", "/api/service-categories/**"
-                        ).permitAll()
+                    // Admin
+                    .requestMatchers(HttpMethod.POST,
+                            "/api/products/**","/api/categories/**",
+                            "/api/services/**","/api/service-categories/**"
+                    ).hasAuthority("ROLE_ADMIN")
 
-                        // Contacto/email
-                        .requestMatchers(HttpMethod.POST, "/api/email/enviar").permitAll()
+                    .requestMatchers(HttpMethod.PUT,
+                            "/api/products/**","/api/categories/**",
+                            "/api/services/**","/api/service-categories/**"
+                    ).hasAuthority("ROLE_ADMIN")
 
-                        // Reservas
-                        .requestMatchers(HttpMethod.POST, "/api/reservas/**")
-                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/reservas/**")
-                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                    .requestMatchers(HttpMethod.DELETE,
+                            "/api/products/**","/api/categories/**",
+                            "/api/services/**","/api/service-categories/**"
+                    ).hasAuthority("ROLE_ADMIN")
 
-                        // Órdenes
-                        .requestMatchers("/api/orders/**")
-                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                    // Cualquier otra cosa requiere autenticación
+                    .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-                        // Usuarios
-                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**")
-                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/me/password")
-                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-
-                        // Admin (CRUD)
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/products/**","/api/categories/**",
-                                "/api/spa-services/**","/api/service-categories/**"
-                        ).hasAuthority("ROLE_ADMIN")
-
-                        .requestMatchers(HttpMethod.PUT,
-                                "/api/products/**","/api/categories/**",
-                                "/api/spa-services/**","/api/service-categories/**"
-                        ).hasAuthority("ROLE_ADMIN")
-
-                        .requestMatchers(HttpMethod.DELETE,
-                                "/api/products/**","/api/categories/**",
-                                "/api/spa-services/**","/api/service-categories/**"
-                        ).hasAuthority("ROLE_ADMIN")
-
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+    return http.build();
 }
