@@ -36,10 +36,10 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
-                        // Preflight CORS
+                        // Preflight
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Autenticación pública
+                        // Auth público
                         .requestMatchers("/api/auth/**").permitAll()
 
                         // Catálogo público
@@ -47,8 +47,7 @@ public class SecurityConfig {
                                 "/api/products", "/api/products/**",
                                 "/api/categories", "/api/categories/**",
                                 "/api/spa-services", "/api/spa-services/**",
-                                "/api/service-categories", "/api/service-categories/**",
-                                "/api/services", "/api/services/**"   // ← AGREGADO AQUÍ
+                                "/api/service-categories", "/api/service-categories/**"
                         ).permitAll()
 
                         // Contacto/email
@@ -70,23 +69,22 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/usuarios/me/password")
                         .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
 
-                        // Admin
+                        // Admin (CRUD)
                         .requestMatchers(HttpMethod.POST,
                                 "/api/products/**","/api/categories/**",
-                                "/api/services/**","/api/service-categories/**"
+                                "/api/spa-services/**","/api/service-categories/**"
                         ).hasAuthority("ROLE_ADMIN")
 
                         .requestMatchers(HttpMethod.PUT,
                                 "/api/products/**","/api/categories/**",
-                                "/api/services/**","/api/service-categories/**"
+                                "/api/spa-services/**","/api/service-categories/**"
                         ).hasAuthority("ROLE_ADMIN")
 
                         .requestMatchers(HttpMethod.DELETE,
                                 "/api/products/**","/api/categories/**",
-                                "/api/services/**","/api/service-categories/**"
+                                "/api/spa-services/**","/api/service-categories/**"
                         ).hasAuthority("ROLE_ADMIN")
 
-                        // Cualquier otra cosa requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
