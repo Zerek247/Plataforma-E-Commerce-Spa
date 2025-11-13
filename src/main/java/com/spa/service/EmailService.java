@@ -25,19 +25,22 @@ public class EmailService {
     public void enviarcorreo(String para, String asunto, String mensaje) {
 
         try {
+            // Escapar saltos de línea para JSON
+            mensaje = mensaje.replace("\n", "<br>").replace("\r", "");
+
             String jsonBody = """
-                {
-                  "sender": {
-                    "name": "H&B SPA",
-                    "email": "hbspa.contacto@gmail.com"
-                  },
-                  "to": [
-                    { "email": "%s" }
-                  ],
-                  "subject": "%s",
-                  "htmlContent": "<p>%s</p>"
-                }
-            """.formatted(para, asunto, mensaje);
+            {
+              "sender": {
+                "name": "H&B SPA",
+                "email": "hbspa.contacto@gmail.com"
+              },
+              "to": [
+                { "email": "%s" }
+              ],
+              "subject": "%s",
+              "htmlContent": "<p>%s</p>"
+            }
+        """.formatted(para, asunto, mensaje);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(apiUrl))
@@ -59,6 +62,7 @@ public class EmailService {
             throw new RuntimeException("Error enviando correo: " + e.getMessage(), e);
         }
     }
+
 
     public void enviarCodigoReset(String para, String codigo, Duration ttl) {
         String asunto = "Código de verificación";
