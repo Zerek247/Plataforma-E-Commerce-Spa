@@ -21,6 +21,7 @@ public class WebConfig {
                                 "http://127.0.0.1:5500",
                                 "http://localhost:5501",
                                 "http://127.0.0.1:5501",
+                                "https://orange-cheetah-309063.hostingersite.com",
                                 "*" //Agregado solo para Postman
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
