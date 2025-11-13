@@ -35,50 +35,58 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // CORS preflight
+
+                        // Preflight CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        //  HAZ PÚBLICO TODO auth (login/register/forgot/reset y variantes)
+                        // Autenticación pública
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Catálogo público (GET)
+                        // Catálogo público
                         .requestMatchers(HttpMethod.GET,
                                 "/api/products", "/api/products/**",
                                 "/api/categories", "/api/categories/**",
                                 "/api/spa-services", "/api/spa-services/**",
-                                "/api/service-categories", "/api/service-categories/**"
+                                "/api/service-categories", "/api/service-categories/**",
+                                "/api/services", "/api/services/**"   // ← AGREGADO AQUÍ
                         ).permitAll()
 
-                        // Envío de contacto/email
+                        // Contacto/email
                         .requestMatchers(HttpMethod.POST, "/api/email/enviar").permitAll()
 
-                        //  Reservas (crear/consultar → autenticado)
-                        .requestMatchers(HttpMethod.POST, "/api/reservas/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET,  "/api/reservas/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                        // Reservas
+                        .requestMatchers(HttpMethod.POST, "/api/reservas/**")
+                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/reservas/**")
+                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
 
                         // Órdenes
-                        .requestMatchers("/api/orders/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                        .requestMatchers("/api/orders/**")
+                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
 
-                        // Usuarios (perfil/historial y cambio de contraseña propio)
-                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/me/password").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                        // Usuarios
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**")
+                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/me/password")
+                        .hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
 
                         // Admin
-                        .requestMatchers(HttpMethod.POST, "/api/images/upload").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST,
                                 "/api/products/**","/api/categories/**",
                                 "/api/services/**","/api/service-categories/**"
                         ).hasAuthority("ROLE_ADMIN")
+
                         .requestMatchers(HttpMethod.PUT,
                                 "/api/products/**","/api/categories/**",
                                 "/api/services/**","/api/service-categories/**"
                         ).hasAuthority("ROLE_ADMIN")
+
                         .requestMatchers(HttpMethod.DELETE,
                                 "/api/products/**","/api/categories/**",
                                 "/api/services/**","/api/service-categories/**"
                         ).hasAuthority("ROLE_ADMIN")
 
-                        // Resto autenticado
+                        // Cualquier otra cosa requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
