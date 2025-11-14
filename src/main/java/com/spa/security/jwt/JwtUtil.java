@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtUtil {
@@ -17,23 +18,29 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    // Genera la clave de firma segura
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    //Genera un token con username y rol
+    // ============================================
+    // GENERAR TOKEN: incluye "role" y "authorities"
+    // ============================================
+
     public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
-                .claim("role", role) // Guarda el rol dentro del token
+                .claim("role", role) // EJ: ROLE_ADMIN
+                .claim("authorities", List.of(role)) // NECESARIO PARA FRONTEND
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Extrae el nombre de usuario desde el token
+    // ============================================
+    // EXTRAER USERNAME
+    // ============================================
+
     public String extractUsername(String token) {
         try {
             return getAllClaims(token).getSubject();
@@ -43,11 +50,13 @@ public class JwtUtil {
         }
     }
 
-    // Extrae el rol del token (ej: ROLE_ADMIN o ROLE_CLIENTE)
+    // ============================================
+    // EXTRAER ROL
+    // ============================================
+
     public String extractRole(String token) {
         try {
-            String role = getAllClaims(token).get("role", String.class);
-            return role != null ? role : "ROLE_CLIENTE"; // por defecto si no existe
+            return getAllClaims(token).get("role", String.class);
         } catch (JwtException e) {
             System.out.println("Error al extraer rol: " + e.getMessage());
             return "ROLE_CLIENTE";
@@ -67,7 +76,6 @@ public class JwtUtil {
         }
     }
 
-    //  Comprueba si expiró
     private boolean isTokenExpired(String token) {
         try {
             return getAllClaims(token).getExpiration().before(new Date());
@@ -76,7 +84,6 @@ public class JwtUtil {
         }
     }
 
-    // Obtiene todos los claims del token
     private Claims getAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())

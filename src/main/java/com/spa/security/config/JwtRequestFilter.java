@@ -32,64 +32,76 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
+        String method = request.getMethod();
 
-        // Rutas públicas (NO requieren token)
-        if (path.startsWith("/api/auth/")
-                || path.startsWith("/api/email/")
-                || path.startsWith("/api/products")
-                || path.startsWith("/api/categories")
-                || path.startsWith("/api/spa-services")
-                || path.startsWith("/api/service-categories")
+        // ===========================================================
+        //  RUTAS PÚBLICAS (solo GET para productos y categorías)
+        // ===========================================================
+        if (
+            // GET públicos
+                (method.equals("GET") && path.startsWith("/api/products"))
+                        || (method.equals("GET") && path.startsWith("/api/categories"))
+                        || (method.equals("GET") && path.startsWith("/api/spa-services"))
+                        || (method.equals("GET") && path.startsWith("/api/service-categories"))
+
+                        // Login y register
+                        || path.startsWith("/api/auth/")
+
+                        // Envío de correos
+                        || path.startsWith("/api/email/")
         ) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Permitir OPTIONS sin token
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+        // ===========================================================
+        //  PERMITIR OPTIONS SIN TOKEN (para CORS)
+        // ===========================================================
+        if ("OPTIONS".equalsIgnoreCase(method)) {
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Leer Authorization
+        // ===========================================================
+        //  PROCESAR TOKEN JWT
+        // ===========================================================
+
         final String authHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
 
-        if (authHeader != null) {
-            System.out.println("Header Authorization recibido: " + authHeader);
-        } else {
-            System.out.println("No se encontró header Authorization en " + request.getRequestURI());
-        }
-
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
+
             try {
                 username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
-                System.out.println("Error al extraer username del token: " + e.getMessage());
+                System.out.println("Error leyendo JWT: " + e.getMessage());
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
             var userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtUtil.isTokenValid(jwt, userDetails.getUsername())) {
 
+                // Extraer el rol del token
                 String role = jwtUtil.extractRole(jwt);
                 String normalizedRole = role.startsWith("ROLE_") ? role : "ROLE_" + role;
 
                 var authorities = List.of(new SimpleGrantedAuthority(normalizedRole));
+
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
         filterChain.doFilter(request, response);
     }
-
 }
