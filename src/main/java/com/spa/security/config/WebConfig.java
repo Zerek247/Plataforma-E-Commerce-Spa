@@ -19,7 +19,8 @@ public class WebConfig {
                                 "http://127.0.0.1:*",
                                 "https://orange-cheetah-309063.hostingersite.com",
                                 "https://plataforma-e-commerce-spa-production.up.railway.app",
-                                "https://healthnbeautyspa.com.mx" 
+                                "https://healthnbeautyspa.com.mx",
+                                "https://admin.healthnbeautyspa.com.mx"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
